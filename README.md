@@ -153,14 +153,6 @@ From Chelsea's perspective:
 
 Therefore, the result is recorded once for the home team and once for the away team, using the score from each team's perspective.
 
-## Notes on API Compatibility
-
-The provided classes and method signatures are preserved.
-
-The implementation avoids changing the expected public API so that external JUnit tests can instantiate and validate the solution as expected.
-
-Although Java 21 supports records, the project keeps the provided class-based structure to remain compatible with the original task skeleton and possible hidden tests.
-
 ## Validation Assumptions
 
 The task description focuses on generating a league table from completed matches.
