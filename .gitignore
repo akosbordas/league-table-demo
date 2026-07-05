@@ -1,0 +1,31 @@
+# Maven build output
+target/
+
+# Java compiled files
+*.class
+
+# Logs
+*.log
+
+# VS Code local workspace state
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# macOS
+.DS_Store
+
+# Environment files
+.env
+.env.*

@@ -1,0 +1,180 @@
+# League Table Demo
+
+Dynamic football league table generator implemented in Java 21.
+
+## Overview
+
+This project implements a small football league table generator.
+
+Given a list of completed football matches, the application calculates the league statistics for every participating team and returns a sorted list of `LeagueTableEntry` objects.
+
+## Requirements
+
+* Java 21 or later
+* Maven 3.x or later
+
+## Build
+
+To compile the project:
+
+```bash
+mvn clean compile
+```
+
+## Run Tests
+
+To execute all tests:
+
+```bash
+mvn test
+```
+
+To compile and run tests in one command:
+
+```bash
+mvn clean test
+```
+
+## Domain Rules
+
+The table is built from completed football matches.
+
+Each match has:
+
+* home team
+* away team
+* home score
+* away score
+
+A win is worth 3 points.
+
+A draw is worth 1 point for each team.
+
+A loss is worth 0 points.
+
+## Sorting Rules
+
+The generated league table is sorted using the following rules:
+
+1. Total points, descending
+2. Goal difference, descending
+3. Goals scored, descending
+4. Team name, alphabetical order
+
+## Example
+
+Given the following matches:
+
+```java
+List<Match> matches = List.of(
+    new Match("Arsenal", "Chelsea", 2, 1),
+    new Match("Chelsea", "Liverpool", 1, 1),
+    new Match("Liverpool", "Arsenal", 3, 0)
+);
+
+LeagueTable leagueTable = new LeagueTable(matches);
+List<LeagueTableEntry> entries = leagueTable.getTableEntries();
+```
+
+The `LeagueTable` processes each completed match, calculates the accumulated statistics for every team, creates final table entries, and returns them sorted according to the league table rules.
+
+## Design Notes
+
+The solution is intentionally split into small classes with clear responsibilities.
+
+### `Match`
+
+Represents a completed football match.
+
+It contains the home team, away team, home score, and away score.
+
+### `TeamStatistics`
+
+Accumulates statistics for a single team while the league table is being built.
+
+This class tracks:
+
+* matches played
+* wins
+* draws
+* losses
+* goals scored
+* goals conceded
+* goal difference
+* total points
+
+`TeamStatistics` is mutable because it represents intermediate aggregation state.
+
+### `LeagueTableEntry`
+
+Represents a final row in the generated league table.
+
+It is a read-only result object containing already calculated values.
+
+### `LeagueTableEntryFactory`
+
+Converts accumulated `TeamStatistics` into `LeagueTableEntry` objects.
+
+The factory is stateless and exposed as a singleton instance.
+
+### `LeagueTable`
+
+Coordinates the table generation process.
+
+It is responsible for:
+
+1. Iterating through the completed matches
+2. Updating statistics for both teams in every match
+3. Creating final table entries
+4. Sorting the entries according to the required rules
+5. Returning the calculated table through `getTableEntries()`
+
+## Match Processing
+
+A single football match affects both participating teams.
+
+For example:
+
+```java
+new Match("Arsenal", "Chelsea", 2, 1)
+```
+
+From Arsenal's perspective:
+
+* goals for: 2
+* goals against: 1
+* result: win
+
+From Chelsea's perspective:
+
+* goals for: 1
+* goals against: 2
+* result: loss
+
+Therefore, the result is recorded once for the home team and once for the away team, using the score from each team's perspective.
+
+## Notes on API Compatibility
+
+The provided classes and method signatures are preserved.
+
+The implementation avoids changing the expected public API so that external JUnit tests can instantiate and validate the solution as expected.
+
+Although Java 21 supports records, the project keeps the provided class-based structure to remain compatible with the original task skeleton and possible hidden tests.
+
+## Validation Assumptions
+
+The task description focuses on generating a league table from completed matches.
+
+This implementation assumes that the supplied input contains valid completed matches.
+
+For example:
+
+* team names are expected to be present
+* scores are expected to be non-negative
+* matches are expected not to be null
+
+## Technology
+
+* Java 21
+* Maven
+* JUnit 5
